@@ -48,6 +48,10 @@ public class Player {
 		}
 		return str;
 	}
+	
+	public String showTop() {
+		return hand.get(0).toString();
+	}
 
 	public boolean equals(Player player) {
 		return player.user.getName().equals(this.user.getName());

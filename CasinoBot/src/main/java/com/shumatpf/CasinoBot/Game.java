@@ -2,6 +2,7 @@ package com.shumatpf.CasinoBot;
 
 import java.util.ArrayList;
 
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
 public class Game {
@@ -70,6 +71,12 @@ public class Game {
 
 	public void addCard(Player player) {
 		player.addCard(deck.draw());
+	}
+
+	public void displayVisCards(MessageChannel channel) {
+		for (Player player : players) {
+			channel.sendMessage(player.user.getName() + "'s card: " + player.showTop()).queue();
+		}
 	}
 
 	public void reset() {

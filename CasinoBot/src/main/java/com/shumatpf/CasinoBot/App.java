@@ -43,7 +43,7 @@ public class App extends ListenerAdapter {
 			prefix = message.getContentRaw().substring(0, 1);
 			command = message.getContentRaw().substring(1);
 		} catch (Exception e) {
-			System.out.println("there was an error :o - " + message.getContentRaw());
+			System.out.println("there was an error :( perhaps other bot?- " + message.getContentRaw());
 			return;
 		}
 
@@ -95,6 +95,11 @@ public class App extends ListenerAdapter {
 					}
 				} else {
 					help(ch, 1);
+				}
+				break;
+			case "top-card":
+				if (active && late) {
+					game.displayVisCards(ch);
 				}
 				break;
 			case "end":
