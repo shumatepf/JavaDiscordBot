@@ -49,8 +49,12 @@ public class Player {
 		return str;
 	}
 	
-	public String showTop() {
-		return hand.get(0).toString();
+	public String showCard(int i) {
+		return hand.get(i).toString();
+	}
+	
+	public int getNumCards() {
+		return hand.size();
 	}
 
 	public boolean equals(Player player) {

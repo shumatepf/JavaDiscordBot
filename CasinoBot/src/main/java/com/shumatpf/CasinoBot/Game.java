@@ -38,6 +38,7 @@ public class Game {
 	// add a user
 	public boolean add(Player player) {
 		if (!players.contains(player)) {
+			player.setActive(true);
 			players.add(player);
 			return true;
 		} else {
@@ -75,8 +76,17 @@ public class Game {
 
 	public void displayVisCards(MessageChannel channel) {
 		for (Player player : players) {
-			channel.sendMessage(player.user.getName() + "'s card: " + player.showTop()).queue();
+			channel.sendMessage(player.user.getName() + "'s card: " + player.showCard(0)).queue();
 		}
+	}
+
+	public boolean containsPlayer(Player player) {
+		for (Player p : players) {
+			if (p.user.getName().equals(player.user.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void reset() {

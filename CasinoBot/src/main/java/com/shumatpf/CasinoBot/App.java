@@ -102,6 +102,14 @@ public class App extends ListenerAdapter {
 					game.displayVisCards(ch);
 				}
 				break;
+			case "hit":
+				if (active && late && game.containsPlayer(player)) {
+					game.dealHand(player, 1);
+					System.out.print("hit");
+					user.openPrivateChannel().queue((channel) -> {
+						channel.sendMessage(player.showCard(player.getNumCards() - 1)).queue();
+					});
+				}
 			case "end":
 				break;
 			case "help":
@@ -125,7 +133,7 @@ public class App extends ListenerAdapter {
 			evt.getChannel().sendMessage(game.getPlayer(evt.getAuthor()).showHand()).queue();
 		}
 	}
-	
+
 	/*
 	 * Guessing Game
 	 */
@@ -139,11 +147,9 @@ public class App extends ListenerAdapter {
 	}
 
 	/*
-	 * -----------------------
-	 * Black Jack Game Methods
-	 * -----------------------
+	 * ----------------------- Black Jack Game Methods -----------------------
 	 */
-	
+
 	/*
 	 * Create game with creator - still open to join at this point
 	 */
@@ -181,7 +187,8 @@ public class App extends ListenerAdapter {
 		switch (num) {
 		case 0:
 			channel.sendMessage("```Basic commands:\n\t" + ">hello\n\t" + ">guess (integer between 0 and 9)\n"
-					+ "Game commands:\n\t" + ">start\n\t" + ">add\n\t" + ">leave\n\t" + ">end```").queue();
+					+ "Game commands:\n\t" + ">blackjack\n\t" + ">start\n\t" + ">join\n\t" + ">leave\n\t"
+					+ ">top-card\n\t" + ">end```").queue();
 			break;
 		case 1:
 			channel.sendMessage("There is no active game, the game is already active, or you are already playing")
