@@ -103,13 +103,20 @@ public class App extends ListenerAdapter {
 				}
 				break;
 			case "hit":
-				if (active && late && game.containsPlayer(player)) {
+				if (active && late && game.containsPlayer(player) && game.getPlayer(user).isStand()) {
 					game.dealHand(player, 1);
 					System.out.print("hit");
 					user.openPrivateChannel().queue((channel) -> {
 						channel.sendMessage(player.showCard(player.getNumCards() - 1)).queue();
 					});
 				}
+				break;
+			case "stand":
+				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
+					game.getPlayer(user).setStand(true);
+					ch.sendMessage(user.getName() + " is standing").queue();
+				}
+				break;
 			case "end":
 				if (player.equals(game.getCreator())) {
 					ch.sendMessage("The game has been ended").queue();

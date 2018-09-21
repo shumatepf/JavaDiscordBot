@@ -1,8 +1,6 @@
 package com.shumatpf.CasinoBot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
