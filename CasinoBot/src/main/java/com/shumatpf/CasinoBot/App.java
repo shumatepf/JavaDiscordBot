@@ -103,7 +103,7 @@ public class App extends ListenerAdapter {
 				}
 				break;
 			case "hit":
-				if (active && late && game.containsPlayer(player) && game.getPlayer(user).isStand()) {
+				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
 					game.dealHand(player, 1);
 					System.out.print("hit");
 					user.openPrivateChannel().queue((channel) -> {
