@@ -5,11 +5,12 @@
 `>help` 
 
 ## Black Jack Functions WIP
-`>blackjack` 
-`>join` 
-`>leave` 
-`>start` 
-`>hit` 
-`>stand` 
-`>end` 
+`>blackjack`
+
+`>join`  
+`>leave`  
+`>start`  
+`>hit`  
+`>stand`  
+`>end`  
 
