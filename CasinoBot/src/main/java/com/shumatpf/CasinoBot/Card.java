@@ -33,6 +33,10 @@ public class Card {
 	public String toString() {
 		return rank() + " of " + suit();
 	}
+	
+	public String toStringBlock() {
+		return "`" + rank() + " of " + suit() + "`";
+	}
 
 	/**
 	 * Returns the rank of the card as a string

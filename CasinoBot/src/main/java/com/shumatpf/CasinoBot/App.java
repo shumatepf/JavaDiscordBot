@@ -73,10 +73,7 @@ public class App extends ListenerAdapter {
 				break;
 			case "join":
 				if (game.add(player) && active && !late) {
-					ch.sendMessage("Current players:").queue();
-					for (Player pl : game.getPlayers()) {
-						ch.sendMessage("    " + pl.user.getName()).queue();
-					}
+					ch.sendMessage("*" + player.user.getName() + " has joined the game").queue();
 				} else {
 					help(ch, 1);
 				}
@@ -114,12 +111,12 @@ public class App extends ListenerAdapter {
 			case "stand":
 				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
 					game.getPlayer(user).setStand(true);
-					ch.sendMessage(user.getName() + " is standing").queue();
+					ch.sendMessage("`" + user.getName() + "` is standing").queue();
 				}
 				break;
 			case "end":
 				if (player.equals(game.getCreator())) {
-					ch.sendMessage("The game has been ended").queue();
+					ch.sendMessage("**The game has been ended**").queue();
 					active = false;
 					late = false;
 					game.reset();
@@ -172,9 +169,9 @@ public class App extends ListenerAdapter {
 	private void createBJ(Player player, MessageChannel channel) {
 		game = new Game(player);
 		active = true;
-		channel.sendMessage("Blackjack game created by: " + player.user.getName()).queue();
-		channel.sendMessage("If anyone wants to join, enter '>join'").queue();
-		channel.sendMessage("To start the game, the creator must enter '>start'").queue();
+		channel.sendMessage("**Blackjack game created by:** *" + player.user.getName() + "*").queue();
+		channel.sendMessage("If anyone wants to join, enter `>join`").queue();
+		channel.sendMessage("To start the game, the creator must enter `>start`").queue();
 	}
 
 	/*
@@ -182,7 +179,7 @@ public class App extends ListenerAdapter {
 	 */
 	private void gameStart(MessageChannel ch) {
 		late = true;
-		ch.sendMessage("game started").queue();
+		ch.sendMessage("**GAME STARTED**").queue();
 		ch.sendMessage("all players have been messaged their hands").queue();
 
 		game.deal(2);
@@ -193,7 +190,6 @@ public class App extends ListenerAdapter {
 				channel.sendMessage(player.showHand()).queue();
 			});
 		}
-
 	}
 
 	/*

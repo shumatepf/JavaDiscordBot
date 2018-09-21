@@ -35,10 +35,20 @@ public class Player {
 	}
 
 	public String showHand() {
-		String str = "Your hand:\n";
+		String str = "**Your hand:**\n";
 		for (Card card : hand) {
-			str += (card.toString() + "\n");
+			str += (card.toStringBlock() + "\n");
 		}
+		return str;
+	}
+
+	public String showVisCards() {
+		String str = "*" + user.getName() + "'s* visible cards:";
+
+		for (int i = 1; i < hand.size(); i++) {
+			str += "\n\t" + showCard(i);
+		}
+
 		return str;
 	}
 

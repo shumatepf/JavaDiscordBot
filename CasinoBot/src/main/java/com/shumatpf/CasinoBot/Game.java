@@ -18,14 +18,17 @@ public class Game {
 		creator = player;
 	}
 
+	// get the creator of the game
 	public Player getCreator() {
 		return creator;
 	}
 
+	// get the list of players
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 
+	// return the player object associated with user
 	public Player getPlayer(User user) {
 		for (Player player : players) {
 			if (player.user.getName().equals(user.getName())) {
@@ -51,6 +54,7 @@ public class Game {
 		return players.remove(player);
 	}
 
+	// deals num cards to each player - used at start of game
 	public boolean deal(int num) {
 
 		if (players.size() * num >= 52) {
@@ -64,22 +68,21 @@ public class Game {
 		return true;
 	}
 
+	// deals num cards to one person - used at start and whenever a player hits
 	public void dealHand(Player player, int num) {
 		for (int i = 0; i < num; i++) {
-			addCard(player);
+			player.addCard(deck.draw());
 		}
 	}
 
-	public void addCard(Player player) {
-		player.addCard(deck.draw());
-	}
-
+	// displays the cards visible to all players in the common channel
 	public void displayVisCards(MessageChannel channel) {
 		for (Player player : players) {
-			channel.sendMessage(player.user.getName() + "'s card: " + player.showCard(0)).queue();
+			channel.sendMessage(player.showVisCards()).queue();
 		}
 	}
 
+	// returns true if the player is in the game
 	public boolean containsPlayer(Player player) {
 		for (Player p : players) {
 			if (p.user.getName().equals(player.user.getName())) {
@@ -89,11 +92,18 @@ public class Game {
 		return false;
 	}
 
+	// resets the game - creates new deck and removes cards from all players
 	public void reset() {
 		for (Player player : players) {
 			player.removeAll();
 		}
 		deck = new Deck();
+	}
+
+	// ends the game - dont know if this has much functionality
+	public void end() {
+		deck = new Deck();
+		players = new ArrayList<>();
 	}
 
 }
