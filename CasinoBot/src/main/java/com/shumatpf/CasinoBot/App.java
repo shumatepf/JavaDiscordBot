@@ -72,13 +72,13 @@ public class App extends ListenerAdapter {
 				}
 				break;
 			case "join":
-				if (!game.add(player) || !active || late) {
-					help(ch, 1);
-				} else {
+				if (game.add(player) && active && !late) {
 					ch.sendMessage("Current players:").queue();
 					for (Player pl : game.getPlayers()) {
 						ch.sendMessage("    " + pl.user.getName()).queue();
 					}
+				} else {
+					help(ch, 1);
 				}
 				break;
 			case "leave":
@@ -111,6 +111,15 @@ public class App extends ListenerAdapter {
 					});
 				}
 			case "end":
+				if (player.equals(game.getCreator())) {
+					ch.sendMessage("The game has been ended").queue();
+					active = false;
+					late = false;
+					game.reset();
+				} else {
+					ch.sendMessage("You must be the creator to end the game").queue();
+				}
+
 				break;
 			case "help":
 			default:

@@ -1,6 +1,8 @@
 package com.shumatpf.CasinoBot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -37,13 +39,13 @@ public class Game {
 
 	// add a user
 	public boolean add(Player player) {
-		if (!players.contains(player)) {
-			player.setActive(true);
-			players.add(player);
-			return true;
-		} else {
-			return false;
+		for (Player p : players) {
+			if (player.user.getName().equals(p.user.getName()))
+				return false;
 		}
+		player.setActive(true);
+		players.add(player);
+		return true;
 	}
 
 	// remove a user
