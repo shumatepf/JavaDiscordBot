@@ -5,7 +5,7 @@
 `>help` 
 
 ## Black Jack Functions WIP
-`>blackjack`
+`>blackjack`  
 `>join`  
 `>leave`  
 `>start`  
