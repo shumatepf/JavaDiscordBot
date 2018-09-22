@@ -10,6 +10,7 @@
 `>leave`  
 `>start`  
 `>hit`  
+`>top-card`  
 `>stand`  
 `>end`  
 
