@@ -33,11 +33,13 @@ public class App extends ListenerAdapter {
 		Player player = new Player(user);
 		MessageChannel ch = evt.getChannel();
 		Message message = evt.getMessage();
+		
+		if (!ch.getName().equals(Reference.CHANNEL)) {
+			return; // only accepts commands in the predecided channel - "casino"
+		}
 
 		String prefix = "";
 		String command = "";
-
-		// System.out.println(message.getContentRaw());
 
 		try {
 			prefix = message.getContentRaw().substring(0, 1);
@@ -96,7 +98,7 @@ public class App extends ListenerAdapter {
 				break;
 			case "show-cards":
 				if (active && late) {
-					game.displayVisCards(ch);
+					ch.sendMessage(game.displayVisCards()).queue();
 				}
 				break;
 			case "hit":

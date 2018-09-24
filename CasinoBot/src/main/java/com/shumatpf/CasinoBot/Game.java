@@ -80,10 +80,12 @@ public class Game {
 	}
 
 	// displays the cards visible to all players in the common channel
-	public void displayVisCards(MessageChannel channel) {
+	public String displayVisCards() {
+		String str = "";
 		for (Player player : players) {
-			channel.sendMessage(player.showVisCards()).queue();
+			str += player.showVisCards();
 		}
+		return str;
 	}
 
 	// returns true if the player is in the game
