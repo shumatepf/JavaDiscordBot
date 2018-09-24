@@ -33,7 +33,7 @@ public class App extends ListenerAdapter {
 		Player player = new Player(user);
 		MessageChannel ch = evt.getChannel();
 		Message message = evt.getMessage();
-		
+
 		if (!ch.getName().equals(Reference.CHANNEL)) {
 			return; // only accepts commands in the predecided channel - "casino"
 		}
@@ -209,8 +209,8 @@ public class App extends ListenerAdapter {
 		switch (num) {
 		case 0:
 			channel.sendMessage("```Basic commands:\n\t" + ">hello\n\t" + ">guess (integer between 0 and 9)\n"
-					+ "Game commands:\n\t" + ">blackjack\n\t" + ">start\n\t" + ">join\n\t" + ">leave\n\t"
-					+ ">top-card\n\t" + ">end```").queue();
+					+ "Blackjack commands:\n\t" + ">blackjack\n\t" + ">join\n\t" + ">leave\n\t" + ">start\n\t"
+					+ ">hit\n\t" + ">show-cards\n\t" + ">stand\n\t" + ">end\n\t" + ">exit```").queue();
 			break;
 		case 1:
 			channel.sendMessage("There is no active game, the game is already active, or you are already playing")
