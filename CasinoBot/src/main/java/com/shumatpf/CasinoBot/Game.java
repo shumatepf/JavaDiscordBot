@@ -16,6 +16,9 @@ public class Game {
 		players = new ArrayList<>();
 		deck = new Deck();
 		creator = player;
+		for (int i = 0; i < 10; i++) {
+			deck.shuffle();
+		}
 	}
 
 	// get the creator of the game
@@ -50,8 +53,9 @@ public class Game {
 	}
 
 	// remove a user
-	public boolean remove(Player player) {
-		return players.remove(player);
+	public boolean remove(User user) {
+		Player temp = this.getPlayer(user);
+		return players.remove(temp);
 	}
 
 	// deals num cards to each player - used at start of game
@@ -90,6 +94,15 @@ public class Game {
 			}
 		}
 		return false;
+	}
+
+	public boolean allStanding() {
+		for (Player player : players) {
+			if (!player.isStand()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// resets the game - creates new deck and removes cards from all players

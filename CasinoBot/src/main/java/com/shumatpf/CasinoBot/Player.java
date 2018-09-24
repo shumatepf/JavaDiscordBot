@@ -35,7 +35,7 @@ public class Player {
 	}
 
 	public String showHand() {
-		String str = "**Your hand:**\n";
+		String str = "";
 		for (Card card : hand) {
 			str += (card.toStringBlock() + "\n");
 		}

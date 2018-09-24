@@ -60,7 +60,7 @@ public class Deck {
 		return ret;
 	}
 
-	public void suffle() {
+	public void shuffle() {
 		int n = draw.size();
 		Random random = new Random();
 		random.nextInt();

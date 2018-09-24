@@ -73,13 +73,13 @@ public class App extends ListenerAdapter {
 				break;
 			case "join":
 				if (game.add(player) && active && !late) {
-					ch.sendMessage("*" + player.user.getName() + " has joined the game").queue();
+					ch.sendMessage("*" + player.user.getName() + "* has joined the game").queue();
 				} else {
 					help(ch, 1);
 				}
 				break;
 			case "leave":
-				if (!game.remove(player) || !active || !late) {
+				if (!game.remove(user)) {
 					help(ch, 1);
 				}
 				break;
@@ -94,24 +94,31 @@ public class App extends ListenerAdapter {
 					help(ch, 1);
 				}
 				break;
-			case "top-card":
+			case "show-cards":
 				if (active && late) {
 					game.displayVisCards(ch);
 				}
 				break;
 			case "hit":
 				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
-					game.dealHand(player, 1);
+					Player curp = game.getPlayer(user);
+					game.dealHand(game.getPlayer(user), 1);
 					System.out.print("hit");
 					user.openPrivateChannel().queue((channel) -> {
-						channel.sendMessage(player.showCard(player.getNumCards() - 1)).queue();
+						channel.sendMessage("**New Card:** \n`" + curp.showCard(curp.getNumCards() - 1) + "`").queue();
 					});
 				}
 				break;
 			case "stand":
 				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
 					game.getPlayer(user).setStand(true);
-					ch.sendMessage("`" + user.getName() + "` is standing").queue();
+					ch.sendMessage("*" + user.getName() + "* is standing").queue();
+					if (game.allStanding()) {
+						ch.sendMessage("**END RESULTS:**").queue();
+						for (Player p : game.getPlayers()) {
+							ch.sendMessage("*" + p.user.getName() + "'s* cards:\n" + p.showHand()).queue();
+						}
+					}
 				}
 				break;
 			case "end":
@@ -123,8 +130,10 @@ public class App extends ListenerAdapter {
 				} else {
 					ch.sendMessage("You must be the creator to end the game").queue();
 				}
-
 				break;
+			case "exit":
+				ch.sendMessage("Bot shutting down").queue();
+				System.exit(1);
 			case "help":
 			default:
 				System.out.println("default");
@@ -179,15 +188,14 @@ public class App extends ListenerAdapter {
 	 */
 	private void gameStart(MessageChannel ch) {
 		late = true;
-		ch.sendMessage("**GAME STARTED**").queue();
-		ch.sendMessage("all players have been messaged their hands").queue();
+		ch.sendMessage("**GAME STARTED**\n*all players have been messaged their hands*").queue();
 
 		game.deal(2);
 		for (Player player : game.getPlayers()) {
 			System.out.println(player.user.getName());
 			player.setActive(true);
 			player.user.openPrivateChannel().queue((channel) -> {
-				channel.sendMessage(player.showHand()).queue();
+				channel.sendMessage("**Your hand:**\n" + player.showHand()).queue();
 			});
 		}
 	}
