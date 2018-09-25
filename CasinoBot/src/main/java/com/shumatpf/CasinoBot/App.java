@@ -30,7 +30,7 @@ public class App extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent evt) {
 		User user = evt.getAuthor();
-		Player player = new Player(user);
+		// Player player = new Player(user);
 		MessageChannel ch = evt.getChannel();
 		Message message = evt.getMessage();
 
@@ -70,12 +70,12 @@ public class App extends ListenerAdapter {
 				if (active) {
 					help(ch, 1);
 				} else {
-					createBJ(player, ch);
+					createBJ(user, ch);
 				}
 				break;
 			case "join":
-				if (game.add(player) && active && !late) {
-					ch.sendMessage("*" + player.user.getName() + "* has joined the game").queue();
+				if (game.add(user) && active && !late) {
+					ch.sendMessage("*" + user.getName() + "* has joined the game").queue();
 				} else {
 					help(ch, 1);
 				}
@@ -87,7 +87,7 @@ public class App extends ListenerAdapter {
 				break;
 			case "start":
 				if (active) {
-					if (player.equals(game.getCreator())) {
+					if (game.isCreator(user)) {
 						gameStart(ch);
 					} else {
 						help(ch, 2);
@@ -102,7 +102,7 @@ public class App extends ListenerAdapter {
 				}
 				break;
 			case "hit":
-				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
+				if (active && late && game.containsPlayer(user) && !game.getPlayer(user).isStand()) {
 					Player curp = game.getPlayer(user);
 					game.dealHand(game.getPlayer(user), 1);
 					System.out.print("hit");
@@ -112,7 +112,7 @@ public class App extends ListenerAdapter {
 				}
 				break;
 			case "stand":
-				if (active && late && game.containsPlayer(player) && !game.getPlayer(user).isStand()) {
+				if (active && late && game.containsPlayer(user) && !game.getPlayer(user).isStand()) {
 					game.getPlayer(user).setStand(true);
 					ch.sendMessage("*" + user.getName() + "* is standing").queue();
 					if (game.allStanding()) {
@@ -124,7 +124,7 @@ public class App extends ListenerAdapter {
 				}
 				break;
 			case "end":
-				if (player.equals(game.getCreator())) {
+				if (game.isCreator(user)) {
 					ch.sendMessage("**The game has been ended**").queue();
 					active = false;
 					late = false;
@@ -177,10 +177,10 @@ public class App extends ListenerAdapter {
 	/*
 	 * Create game with creator - still open to join at this point
 	 */
-	private void createBJ(Player player, MessageChannel channel) {
-		game = new Game(player);
+	private void createBJ(User user, MessageChannel channel) {
+		game = new Game(user);
 		active = true;
-		channel.sendMessage("**Blackjack game created by:** *" + player.user.getName() + "*").queue();
+		channel.sendMessage("**Blackjack game created by:** *" + user.getName() + "*").queue();
 		channel.sendMessage("If anyone wants to join, enter `>join`").queue();
 		channel.sendMessage("To start the game, the creator must enter `>start`").queue();
 	}

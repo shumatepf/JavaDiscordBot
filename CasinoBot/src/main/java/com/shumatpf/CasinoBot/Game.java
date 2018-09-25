@@ -2,7 +2,6 @@ package com.shumatpf.CasinoBot;
 
 import java.util.ArrayList;
 
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
 public class Game {
@@ -12,10 +11,10 @@ public class Game {
 	Player creator;
 
 	// CONSTRUCTOR
-	public Game(Player player) {
+	public Game(User user) {
 		players = new ArrayList<>();
 		deck = new Deck();
-		creator = player;
+		creator = new Player(user);
 		for (int i = 0; i < 10; i++) {
 			deck.shuffle();
 		}
@@ -42,13 +41,12 @@ public class Game {
 	}
 
 	// add a user
-	public boolean add(Player player) {
+	public boolean add(User user) {
 		for (Player p : players) {
-			if (player.user.getName().equals(p.user.getName()))
+			if (user.getName().equals(p.user.getName()))
 				return false;
 		}
-		player.setActive(true);
-		players.add(player);
+		players.add(new Player(user));
 		return true;
 	}
 
@@ -89,9 +87,9 @@ public class Game {
 	}
 
 	// returns true if the player is in the game
-	public boolean containsPlayer(Player player) {
+	public boolean containsPlayer(User user) {
 		for (Player p : players) {
-			if (p.user.getName().equals(player.user.getName())) {
+			if (p.user.getName().equals(user.getName())) {
 				return true;
 			}
 		}
@@ -105,6 +103,10 @@ public class Game {
 			}
 		}
 		return true;
+	}
+
+	public boolean isCreator(User user) {
+		return user.getName().equals(creator.user.getName());
 	}
 
 	// resets the game - creates new deck and removes cards from all players
