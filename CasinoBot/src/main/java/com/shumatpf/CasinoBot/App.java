@@ -2,6 +2,9 @@ package com.shumatpf.CasinoBot;
 
 import java.util.Random;
 
+import com.shumatpf.Blackjack.Game;
+import com.shumatpf.Blackjack.Player;
+
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -103,9 +106,9 @@ public class App extends ListenerAdapter {
 				break;
 			case "hit":
 				if (active && late && game.containsPlayer(user) && !game.getPlayer(user).isStand()) {
-					Player curp = game.getPlayer(user);
-					game.dealHand(game.getPlayer(user), 1);
+					game.dealHand(user, 1);
 					System.out.print("hit");
+					Player curp = game.getPlayer(user);
 					user.openPrivateChannel().queue((channel) -> {
 						channel.sendMessage("**New Card:** \n`" + curp.showCard(curp.getNumCards() - 1) + "`").queue();
 					});

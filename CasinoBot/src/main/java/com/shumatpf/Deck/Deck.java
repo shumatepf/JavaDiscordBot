@@ -1,4 +1,4 @@
-package com.shumatpf.CasinoBot;
+package com.shumatpf.Deck;
 
 import java.util.ArrayList;
 import java.util.Random;

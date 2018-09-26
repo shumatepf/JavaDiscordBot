@@ -1,4 +1,4 @@
-package com.shumatpf.CasinoBot;
+package com.shumatpf.Deck;
 
 public class Card {
 	public static final int HEARTS = 0;

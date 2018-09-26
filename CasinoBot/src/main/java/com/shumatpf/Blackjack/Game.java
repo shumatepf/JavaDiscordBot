@@ -1,6 +1,8 @@
-package com.shumatpf.CasinoBot;
+package com.shumatpf.Blackjack;
 
 import java.util.ArrayList;
+
+import com.shumatpf.Deck.Deck;
 
 import net.dv8tion.jda.core.entities.User;
 
@@ -64,16 +66,17 @@ public class Game {
 		}
 
 		for (Player player : players) {
-			dealHand(player, num);
+			dealHand(player.user, num);
 		}
 
 		return true;
 	}
 
 	// deals num cards to one person - used at start and whenever a player hits
-	public void dealHand(Player player, int num) {
+	public void dealHand(User user, int num) {
+		Player p = this.getPlayer(user);
 		for (int i = 0; i < num; i++) {
-			player.addCard(deck.draw());
+			p.addCard(deck.draw());
 		}
 	}
 

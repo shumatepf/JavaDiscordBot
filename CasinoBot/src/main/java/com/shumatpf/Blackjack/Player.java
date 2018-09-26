@@ -1,6 +1,8 @@
-package com.shumatpf.CasinoBot;
+package com.shumatpf.Blackjack;
 
 import java.util.ArrayList;
+
+import com.shumatpf.Deck.Card;
 
 import net.dv8tion.jda.core.entities.User;
 

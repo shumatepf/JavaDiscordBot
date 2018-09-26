@@ -1,4 +1,4 @@
-package com.shumatpf.CasinoBot;
+package com.shumatpf.Deck;
 
 public class TestDeck {
 	public static void main(String[] args) {
