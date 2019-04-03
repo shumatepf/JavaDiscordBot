@@ -1,16 +1,19 @@
-package Blackjack;
+package Games;
 
 import java.util.ArrayList;
 
 import Deck.Deck;
-
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class Game {
+public abstract class Game {
 
-	ArrayList<Player> players;
-	Deck deck;
-	Player creator;
+	protected ArrayList<Player> players;
+	private Deck deck;
+	private Player creator;
+	public boolean active;
+	public boolean late;
 
 	// CONSTRUCTOR
 	public Game(User user) {
@@ -21,6 +24,8 @@ public class Game {
 			deck.shuffle();
 		}
 	}
+	
+	public abstract void handleEvent(User user, MessageChannel ch, String command);
 
 	// get the creator of the game
 	public Player getCreator() {
@@ -80,15 +85,6 @@ public class Game {
 		}
 	}
 
-	// displays the cards visible to all players in the common channel
-	public String displayVisCards() {
-		String str = "";
-		for (Player player : players) {
-			str += player.showVisCards();
-		}
-		return str;
-	}
-
 	// returns true if the player is in the game
 	public boolean containsPlayer(User user) {
 		for (Player p : players) {
@@ -97,15 +93,6 @@ public class Game {
 			}
 		}
 		return false;
-	}
-
-	public boolean allStanding() {
-		for (Player player : players) {
-			if (!player.isStand()) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public boolean isCreator(User user) {
