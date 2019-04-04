@@ -44,8 +44,8 @@ public class App extends ListenerAdapter {
 		String command = "";
 
 		try {
-			prefix = message.getContentRaw().substring(0, 1);
-			command = message.getContentRaw().substring(1);
+			prefix = message.getContentRaw().substring(0, 2);
+			command = message.getContentRaw().substring(2);
 		} catch (Exception e) {
 			System.out.println("there was an error :( perhaps other bot?- " + message.getContentRaw());
 			return;

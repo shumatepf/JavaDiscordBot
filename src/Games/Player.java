@@ -50,6 +50,7 @@ public class Player {
 		for (int i = 1; i < hand.size(); i++) {
 			str += "\n\t" + showCard(i);
 		}
+		str += "\n";
 
 		return str;
 	}
