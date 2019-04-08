@@ -6,14 +6,14 @@ import net.dv8tion.jda.core.entities.User;
 
 public class BlackJack extends Game {
 
-	public BlackJack(User user) {
-		super(user);
+	public BlackJack(User user, MessageChannel ch) {
+		super(user, ch);
 	}
 	
 	public boolean userHit(User user) {
-			dealHand(user, 1);
+			dealHand(user.getName(), 1);
 			System.out.print("hit");
-			Player curp = getPlayer(user);
+			Player curp = getPlayer(user.getName());
 			user.openPrivateChannel().queue((channel) -> {
 				channel.sendMessage("**New Card:** \n`" + curp.showCard(curp.getNumCards() - 1) + "`").queue();
 			});
@@ -40,7 +40,7 @@ public class BlackJack extends Game {
 	}
 
 	@Override
-	public void handleEvent(User user, MessageChannel ch, String command) {
+	public void handleEvent(User user, String command) {
 		String[] clist = command.split("\\s+");
 		switch (clist[0]) {
 		case "join":
@@ -64,7 +64,7 @@ public class BlackJack extends Game {
 		case "start":
 			if (active) {
 				if (isCreator(user)) {
-					gameStart(ch);
+					gameStart();
 				} else {
 					App.help(ch, 2);
 				}
@@ -80,18 +80,18 @@ public class BlackJack extends Game {
 			}
 			break;
 		case "hit":
-			if (active && late && containsPlayer(user) && !getPlayer(user).isStand()) {
+			if (active && late && containsPlayer(user) && !getPlayer(user.getName()).isStand()) {
 				if (userHit(user)) {
-					ch.sendMessage("*" + user.getName() + "* is out with hand:\n" + getPlayer(user).showHand()).queue();
-					getPlayer(user).setStand(true);
+					ch.sendMessage("*" + user.getName() + "* is out with hand:\n" + getPlayer(user.getName()).showHand()).queue();
+					getPlayer(user.getName()).setStand(true);
 				}
 			} else {
 				App.help(ch, 3);
 			}
 			break;
 		case "stand":
-			if (active && late && containsPlayer(user) && !getPlayer(user).isStand()) {
-				getPlayer(user).setStand(true);
+			if (active && late && containsPlayer(user) && !getPlayer(user.getName()).isStand()) {
+				getPlayer(user.getName()).setStand(true);
 				ch.sendMessage("*" + user.getName() + "* is standing").queue();
 			} else {
 				App.help(ch, 3);
@@ -122,7 +122,7 @@ public class BlackJack extends Game {
 	/*
 	 * Starts game with players who joined - no longer able to join
 	 */
-	public void gameStart(MessageChannel ch) {
+	public void gameStart() {
 		ch.sendMessage("**GAME STARTED**\n*all players have been messaged their hands*").queue();
 		late = true;
 		deal(2);

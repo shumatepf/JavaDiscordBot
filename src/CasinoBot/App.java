@@ -105,7 +105,7 @@ public class App extends ListenerAdapter {
 			default:
 				if (game != null) {
 					System.out.println("Handled by game");
-					game.handleEvent(user, ch, command);
+					game.handleEvent(user, command);
 				} else {
 					help(ch, 1);
 				}
@@ -123,7 +123,7 @@ public class App extends ListenerAdapter {
 			return;
 		System.out.println("private message receieved: " + evt.getMessage().getContentRaw());
 		if (game.active && game.late && evt.getMessage().getContentRaw().equals("hand")) {
-			evt.getChannel().sendMessage(game.getPlayer(evt.getAuthor()).showHand()).queue();
+			evt.getChannel().sendMessage(game.getPlayer(evt.getAuthor().getName()).showHand()).queue();
 		}
 	}
 
@@ -146,20 +146,20 @@ public class App extends ListenerAdapter {
 	/*
 	 * Create game with creator - still open to join at this point
 	 */
-	private void createBJ(User user, MessageChannel channel) {
-		game = new BlackJack(user);
+	private void createBJ(User user, MessageChannel ch) {
+		game = new BlackJack(user, ch);
 		game.active = true;
-		channel.sendMessage("**Blackjack game created by:** *" + user.getName() + "*").queue();
-		channel.sendMessage(String.format(
+		ch.sendMessage("**Blackjack game created by:** *" + user.getName() + "*").queue();
+		ch.sendMessage(String.format(
 				"If anyone wants to join, enter `%1$sjoin`\nTo start the game, the creator must enter `%1$sstart`\n",
 				Reference.PREFIX)).queue();
 	}
 	
-	private void createWar(User user, MessageChannel channel) {
-		game = new War(user);
+	private void createWar(User user, MessageChannel ch) {
+		game = new War(user, ch);
 		game.active = true;
-		channel.sendMessage("**War game created by:** *" + user.getName() + "*").queue();
-		channel.sendMessage(String.format(
+		ch.sendMessage("**War game created by:** *" + user.getName() + "*").queue();
+		ch.sendMessage(String.format(
 				"If anyone wants to join, enter `%1$sjoin`\nThe game will begin when two people have joined\n",
 				Reference.PREFIX)).queue();
 	}

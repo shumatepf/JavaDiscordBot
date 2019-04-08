@@ -12,9 +12,15 @@ public class Player {
 	private ArrayList<Card> hand;
 	private boolean inGame = false;
 	private boolean stand = false;
+	private String name;
 
 	public Player(User user) {
 		this.user = user;
+		if (user == null) {
+			name = "bot";
+		} else {
+			name = user.getName();
+		}
 		hand = new ArrayList<>();
 	}
 
@@ -58,9 +64,17 @@ public class Player {
 	public String showCard(int i) {
 		return hand.get(i).toString();
 	}
+	
+	public ArrayList<Card> getHand() {
+		return hand;
+	}
 
 	public int getNumCards() {
 		return hand.size();
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public void setActive(boolean b) {
