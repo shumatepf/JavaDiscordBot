@@ -78,6 +78,20 @@ public class Player {
 	public void setStand(boolean b) {
 		stand = b;
 	}
+	
+	public int getBJValues() {
+		int val = 0;
+		
+		for (Card card : hand) {
+			int tempVal = card.getRank();
+			if (tempVal > 10) {
+				tempVal = 10;
+			}
+			val += tempVal;
+		}
+		
+		return val;
+	}
 
 	public boolean equals(Player player) {
 		return player.user.getName().equals(this.user.getName());

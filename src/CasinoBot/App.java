@@ -5,7 +5,7 @@ import java.util.Random;
 import Games.BlackJack;
 import Games.Game;
 import Games.Player;
-
+import Games.War;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -44,8 +44,8 @@ public class App extends ListenerAdapter {
 		String command = "";
 
 		try {
-			prefix = message.getContentRaw().substring(0, 2);
-			command = message.getContentRaw().substring(2);
+			prefix = message.getContentRaw().substring(0, Reference.PREFIX.length());
+			command = message.getContentRaw().substring(Reference.PREFIX.length());
 		} catch (Exception e) {
 			System.out.println("there was an error :( perhaps other bot?- " + message.getContentRaw());
 			return;
@@ -55,6 +55,9 @@ public class App extends ListenerAdapter {
 			System.out.println("command: " + command);
 			String[] clist = command.split("\\s+");
 			switch (clist[0]) {
+			case "list-games":
+				ch.sendMessage("**Current Games:**\n \tBlackjack").queue();
+				break;
 			case "hello":
 				user.openPrivateChannel().queue((channel) -> {
 					channel.sendMessage("Hello").queue();
@@ -71,20 +74,41 @@ public class App extends ListenerAdapter {
 			case "blackjack":
 				if (game != null) {
 					help(ch, 1);
-				}else {
+				} else {
 					createBJ(user, ch);
+				}
+				break;
+			case "war":
+				if (game != null) {
+					help(ch, 1);
+				} else {
+					createWar(user, ch);
 				}
 				break;
 			case "exit":
 				ch.sendMessage("Bot shutting down").queue();
 				System.exit(1);
 			case "help":
-				System.out.println("default");
-				help(ch, 0);
+				System.out.println("help");
+				if (clist.length > 1) {
+					switch (clist[1]) {
+					case "blackjack":
+						help(ch, 4);
+						break;
+					default:
+						help(ch, -1);
+					}
+				} else {
+					help(ch, 0);
+				}
 				break;
 			default:
-				System.out.println("default");
-				game.handleEvent(user, ch, command);
+				if (game != null) {
+					System.out.println("Handled by game");
+					game.handleEvent(user, ch, command);
+				} else {
+					help(ch, 1);
+				}
 				break;
 			}
 		}
@@ -98,7 +122,7 @@ public class App extends ListenerAdapter {
 		if (evt.getAuthor().isBot())
 			return;
 		System.out.println("private message receieved: " + evt.getMessage().getContentRaw());
-		if (/*active && late && */evt.getMessage().getContentRaw().equals("hand")) {
+		if (game.active && game.late && evt.getMessage().getContentRaw().equals("hand")) {
 			evt.getChannel().sendMessage(game.getPlayer(evt.getAuthor()).showHand()).queue();
 		}
 	}
@@ -126,8 +150,22 @@ public class App extends ListenerAdapter {
 		game = new BlackJack(user);
 		game.active = true;
 		channel.sendMessage("**Blackjack game created by:** *" + user.getName() + "*").queue();
-		channel.sendMessage("If anyone wants to join, enter `>join`").queue();
-		channel.sendMessage("To start the game, the creator must enter `>start`").queue();
+		channel.sendMessage(String.format(
+				"If anyone wants to join, enter `%1$sjoin`\nTo start the game, the creator must enter `%1$sstart`\n",
+				Reference.PREFIX)).queue();
+	}
+	
+	private void createWar(User user, MessageChannel channel) {
+		game = new War(user);
+		game.active = true;
+		channel.sendMessage("**War game created by:** *" + user.getName() + "*").queue();
+		channel.sendMessage(String.format(
+				"If anyone wants to join, enter `%1$sjoin`\nThe game will begin when two people have joined\n",
+				Reference.PREFIX)).queue();
+	}
+
+	public static void endGame() {
+		game = null;
 	}
 
 	/*
@@ -136,9 +174,10 @@ public class App extends ListenerAdapter {
 	public static void help(MessageChannel channel, int num) {
 		switch (num) {
 		case 0:
-			channel.sendMessage("```Basic commands:\n\t" + ">hello\n\t" + ">guess (integer between 0 and 9)\n"
-					+ "Blackjack commands:\n\t" + ">blackjack\n\t" + ">join\n\t" + ">leave\n\t" + ">start\n\t"
-					+ ">hit\n\t" + ">show-cards\n\t" + ">stand\n\t" + ">end\n\t" + ">exit```").queue();
+			channel.sendMessage(
+					String.format("```Basic commands:\n\t%1$shello\n\t%1$sguess (integer between 0 and 9)\n\t%1$slist-games```",
+							Reference.PREFIX))
+					.queue();
 			break;
 		case 1:
 			channel.sendMessage("There is no active game, the game is already active, or you are already playing")
@@ -146,7 +185,17 @@ public class App extends ListenerAdapter {
 			break;
 		case 2:
 			channel.sendMessage("Only " + game.getCreator().user.getName() + " can start the game");
+			break;
+		case 3:
+			channel.sendMessage("Game has not started yet").queue();
+			break;
+		case 4:
+			channel.sendMessage(String.format("```Blackjack commands:\n\t" + "%1$sblackjack\n\t" + "%1$sjoin\n\t"
+					+ "%1$sleave\n\t" + "%1$sstart\n\t" + "%1$shit\n\t" + "%1$sshow-cards\n\t" + "%1$sstand\n\t"
+					+ "%1$send\n\t" + "%1$sexit```", Reference.PREFIX)).queue();
+			break;
 		default:
+			channel.sendMessage("Unkown Command").queue();
 		}
 
 	}

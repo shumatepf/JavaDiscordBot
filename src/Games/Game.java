@@ -26,12 +26,17 @@ public abstract class Game {
 	}
 	
 	public abstract void handleEvent(User user, MessageChannel ch, String command);
+	public abstract void gameStart(MessageChannel ch);
 
 	// get the creator of the game
 	public Player getCreator() {
 		return creator;
 	}
 
+	public int numPlayers() {
+		return players.size();
+	}
+	
 	// get the list of players
 	public ArrayList<Player> getPlayers() {
 		return players;
@@ -101,16 +106,10 @@ public abstract class Game {
 
 	// resets the game - creates new deck and removes cards from all players
 	public void reset() {
-		for (Player player : players) {
-			player.removeAll();
-		}
-		deck = new Deck();
-	}
-
-	// ends the game - dont know if this has much functionality
-	public void end() {
-		deck = new Deck();
+		active = true;
+		late = false;
 		players = new ArrayList<>();
+		deck = new Deck();
 	}
 
 }
